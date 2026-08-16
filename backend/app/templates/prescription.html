@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prescription</title>
+  <style>
+    /* ── A4 Page setup ─────────────────────────────────────────────── */
+    @page {
+      size: A4 portrait;
+      margin: 0;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 210mm;
+      height: 297mm;
+      background: #ffffff;
+      font-family: "Segoe UI", Arial, sans-serif;
+      color: #1a1a1a;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    /* ── Outer card: fills exactly A4 page ─────────────────────────── */
+    .rx-card {
+      width: 210mm;
+      min-height: 297mm;
+      box-sizing: border-box;
+      background: #ffffff;
+      border: 3px solid #14225c;
+      padding: 32px 44px 0 44px;
+      font-family: "Segoe UI", Arial, sans-serif;
+      color: #1a1a1a;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* ── Header ─────────────────────────────────────────────────────── */
+    .rx-header { text-align: center; }
+
+    .rx-clinic-name {
+      color: #0a2c66;
+      font-size: 26px;
+      font-weight: 800;
+      margin: 0 0 5px 0;
+      letter-spacing: 0.3px;
+    }
+
+    .rx-doctor-name {
+      color: #0c4dbc;
+      font-size: 17px;
+      font-weight: 800;
+      margin: 0 0 7px 0;
+      letter-spacing: 0.5px;
+    }
+
+    .rx-credentials {
+      color: #001b59;
+      font-size: 12.5px;
+      font-weight: 700;
+      line-height: 1.55;
+      margin: 0 0 14px 0;
+    }
+
+    .rx-hr {
+      border: none;
+      border-top: 2px solid #2f5bea;
+      margin: 0 0 20px 0;
+    }
+
+    /* ── Patient meta rows ──────────────────────────────────────────── */
+    .rx-meta { margin-bottom: 16px; }
+
+    .rx-meta-row {
+      display: table;
+      width: 100%;
+      margin-bottom: 10px;
+    }
+
+    .rx-field {
+      display: table-cell;
+      width: 50%;
+      font-size: 13px;
+    }
+
+    .rx-field-wide { width: 50%; }
+
+    .rx-label {
+      font-weight: 800;
+      color: #0a2c66;
+      margin-right: 6px;
+    }
+
+    .rx-underline {
+      display: inline-block;
+      border-bottom: 1.5px solid #6a8fe6;
+      padding-bottom: 2px;
+      min-width: 160px;
+    }
+
+    /* ── Clinical notes ─────────────────────────────────────────────── */
+    .rx-notes p {
+      font-size: 13px;
+      margin: 0 0 8px 0;
+      line-height: 1.4;
+    }
+
+    .rx-notes .rx-label {
+      min-width: 110px;
+      display: inline-block;
+    }
+
+    /* ── Medicines table ────────────────────────────────────────────── */
+    .rx-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 18px 0 16px 0;
+      font-size: 12.5px;
+    }
+
+    .rx-table th,
+    .rx-table td {
+      border: 1.5px solid #14225c;
+      padding: 7px 9px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .rx-table th {
+      background: #eef2fc;
+      color: #0a2c66;
+      font-weight: 800;
+    }
+
+    .rx-col-rx { width: 5%; text-align: center; }
+
+    .rx-generic {
+      font-variant: small-caps;
+      font-style: italic;
+      color: #333;
+      font-size: 11px;
+      display: block;
+      margin-top: 2px;
+    }
+
+    /* ── Instructions ───────────────────────────────────────────────── */
+    .rx-instructions {
+      font-size: 13px;
+      margin-bottom: 22px;
+    }
+
+    .rx-instructions ul {
+      margin: 5px 0 0 0;
+      padding-left: 22px;
+    }
+
+    /* ── Footer: contact + signature ────────────────────────────────── */
+    .rx-footer {
+      display: table;
+      width: 100%;
+      margin-top: 26px;
+      margin-bottom: 110px;
+    }
+
+    .rx-contact {
+      display: table-cell;
+      width: 60%;
+      vertical-align: bottom;
+    }
+
+    .rx-contact-row {
+      margin-bottom: 8px;
+      font-size: 12.5px;
+    }
+
+    .rx-icon {
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      line-height: 24px;
+      text-align: center;
+      border-radius: 50%;
+      background: #0a2c66;
+      color: #ffffff;
+      font-size: 12px;
+      margin-right: 7px;
+      vertical-align: middle;
+    }
+
+    .rx-contact-text {
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    .rx-signature {
+      display: table-cell;
+      width: 40%;
+      text-align: center;
+      vertical-align: bottom;
+    }
+
+    .rx-sig-image {
+      max-height: 48px;
+      max-width: 150px;
+      margin-bottom: 4px;
+    }
+
+    .rx-sig-line {
+      width: 170px;
+      border-top: 1.5px solid #333;
+      margin: 0 auto 5px auto;
+    }
+
+    .rx-signature p {
+      font-weight: 800;
+      color: #0a2c66;
+      margin: 0;
+      font-size: 13px;
+    }
+
+    /* ── Decorative wave at bottom ──────────────────────────────────── */
+    .rx-wave {
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      line-height: 0;
+    }
+
+    .rx-wave svg {
+      width: 100%;
+      height: 130px;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+<div class="rx-card">
+
+  <!-- ── Clinic / Doctor Header ──────────────────────────────────── -->
+  <div class="rx-header">
+    <h1 class="rx-clinic-name">{{ clinic_name }}</h1>
+    <h2 class="rx-doctor-name">{{ doctor_name }}</h2>
+    <p class="rx-credentials">
+      {{ credentials_1 }}<br>
+      {{ credentials_2 }}<br>
+      REG NO. {{ reg_no }}
+    </p>
+  </div>
+
+  <hr class="rx-hr">
+
+  <!-- ── Patient Information ─────────────────────────────────────── -->
+  <div class="rx-meta">
+    <div class="rx-meta-row">
+      <div class="rx-field rx-field-wide">
+        <span class="rx-label">Name:</span>
+        <span class="rx-value rx-underline">{{ patient_name }}</span>
+      </div>
+      <div class="rx-field">
+        <span class="rx-label">Date:</span>
+        <span class="rx-value rx-underline">{{ issued_date }}</span>
+      </div>
+    </div>
+    <div class="rx-meta-row">
+      <div class="rx-field rx-field-wide">
+        <span class="rx-label">Age/Sex:</span>
+        <span class="rx-value rx-underline">{{ patient_age_gender }}</span>
+      </div>
+      <div class="rx-field">
+        <span class="rx-label">Mobile:</span>
+        <span class="rx-value rx-underline">{{ patient_mobile }}</span>
+      </div>
+    </div>
+    <div class="rx-meta-row">
+      <div class="rx-field rx-field-wide">
+        <span class="rx-label">Office ID:</span>
+        <span class="rx-value rx-underline">{{ patient_office_id }}</span>
+      </div>
+      <div class="rx-field"></div>
+    </div>
+  </div>
+
+  <!-- ── Clinical Notes ─────────────────────────────────────────── -->
+  <div class="rx-notes">
+    {% if symptoms %}
+    <p><span class="rx-label">Symptoms:</span> {{ symptoms }}</p>
+    {% endif %}
+    {% if findings %}
+    <p><span class="rx-label">Findings:</span> {{ findings }}</p>
+    {% endif %}
+    {% if notes %}
+    <p><span class="rx-label">Notes:</span> {{ notes }}</p>
+    {% endif %}
+    <p>
+      <span class="rx-label">Vitals:</span>
+      Pulse: {{ vitals.pulse or '-' }} /min,
+      SPO2: {{ vitals.spo2 or '-' }} %,
+      BP: {{ vitals.bp or '-' }} mmHg
+      {% if vitals.temp %}, Temp: {{ vitals.temp }} °F{% endif %}
+      {% if vitals.weight %}, Weight: {{ vitals.weight }} kg{% endif %}
+    </p>
+    <p><span class="rx-label">Diagnosis:</span> {{ diagnosis }}</p>
+  </div>
+
+  <!-- ── Medicines Table ────────────────────────────────────────── -->
+  <table class="rx-table">
+    <thead>
+      <tr>
+        <th class="rx-col-rx">Rx</th>
+        <th>Name</th>
+        <th>Frequency</th>
+        <th>Duration</th>
+        <th>Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for med in medicines %}
+      <tr>
+        <td style="text-align:center;">{{ loop.index }}</td>
+        <td>
+          <strong>{{ med.name }}</strong>
+          {% if med.generic %}
+          <br><span class="rx-generic">{{ med.generic }}</span>
+          {% endif %}
+        </td>
+        <td>{{ med.frequency }}</td>
+        <td>{{ med.duration }}</td>
+        <td>{{ med.notes }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <!-- ── Special Instructions ──────────────────────────────────── -->
+  {% if instructions %}
+  <div class="rx-instructions">
+    <span class="rx-label">Instructions:</span>
+    <ul>
+      {% for inst in instructions %}
+      <li>{{ inst }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+
+  <!-- ── Footer: Contact & Signature ───────────────────────────── -->
+  <div class="rx-footer">
+    <div class="rx-contact">
+      <div class="rx-contact-row">
+        <span class="rx-icon">&#9742;</span>
+        <span class="rx-contact-text"><strong>Phone</strong><br>{{ contact_phone }}</span>
+      </div>
+      <div class="rx-contact-row">
+        <span class="rx-icon">&#9993;</span>
+        <span class="rx-contact-text"><strong>Email</strong><br>{{ contact_email }}</span>
+      </div>
+      <div class="rx-contact-row">
+        <span class="rx-icon">&#9825;</span>
+        <span class="rx-contact-text"><strong>Instagram</strong><br>{{ contact_instagram }}</span>
+      </div>
+    </div>
+    <div class="rx-signature">
+      {% if signature_data_uri %}
+      <img src="{{ signature_data_uri }}" class="rx-sig-image" alt="Signature"><br>
+      {% endif %}
+      <div class="rx-sig-line"></div>
+      <p>Signature</p>
+    </div>
+  </div>
+
+  <!-- ── Decorative Wave (bottom) ──────────────────────────────── -->
+  <div class="rx-wave">
+    <svg viewBox="0 0 1056 130" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,65 C180,28 340,102 560,65 C760,37 900,84 1056,46 L1056,110 L0,110 Z" fill="#447dfd"/>
+      <path d="M0,92 C220,65 420,107 660,84 C840,65 950,98 1056,79 L1056,110 L0,110 Z" fill="#0a2358"/>
+    </svg>
+  </div>
+
+</div>
+
+</body>
+</html>

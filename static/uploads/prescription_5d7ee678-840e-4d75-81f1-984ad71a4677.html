@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    @page {
+      size: A4;
+      margin: 0;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      background: #ffffff;
+      font-family: "Segoe UI", Arial, sans-serif;
+      color: #1a1a1a;
+      font-size: 13.5px;
+      line-height: 1.4;
+    }
+    .rx-card {
+      width: 100%;
+      box-sizing: border-box;
+      background: #ffffff;
+      border: 1px solid #14225c;
+      padding: 40px 45px 0 45px;
+      position: relative;
+      min-height: 297mm; /* Full A4 height */
+    }
+    .rx-header {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    .rx-clinic-name {
+      color: #0a2c66;
+      font-size: 28px;
+      font-weight: 800;
+      margin: 0 0 6px 0;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+    }
+    .rx-doctor-name {
+      color: #0c4dbc;
+      font-size: 18px;
+      font-weight: 800;
+      margin: 0 0 8px 0;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    .rx-credentials {
+      color: #001b59;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1.4;
+      margin: 0 0 14px 0;
+    }
+    .rx-hr {
+      border: none;
+      border-top: 2px solid #2f5bea;
+      margin: 0 0 20px 0;
+    }
+    .rx-meta {
+      margin-bottom: 20px;
+    }
+    .rx-meta-row {
+      display: table;
+      width: 100%;
+      margin-bottom: 12px;
+    }
+    .rx-field {
+      display: table-cell;
+      width: 50%;
+      font-size: 14px;
+    }
+    .rx-field-wide {
+      width: 60%;
+    }
+    .rx-label {
+      font-weight: 800;
+      color: #0a2c66;
+      margin-right: 6px;
+    }
+    .rx-value {
+      border-bottom: 1.5px solid #6a8fe6;
+      padding-bottom: 2px;
+      display: inline-block;
+      min-width: 180px;
+    }
+    .rx-notes p {
+      font-size: 14px;
+      margin: 0 0 8px 0;
+    }
+    .rx-notes .rx-label {
+      min-width: 110px;
+      display: inline-block;
+    }
+    .rx-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0 20px 0;
+      font-size: 13px;
+    }
+    .rx-table th, .rx-table td {
+      border: 1.5px solid #14225c;
+      padding: 8px 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+    .rx-table th {
+      background: #eef2fc;
+      color: #0a2c66;
+      font-weight: 800;
+    }
+    .rx-col-rx { width: 5%; text-align: center; }
+    .rx-col-name { width: 40%; }
+    .rx-generic {
+      font-variant: small-caps;
+      font-style: italic;
+      color: #555;
+      font-size: 11.5px;
+      display: block;
+      margin-top: 3px;
+    }
+    .rx-instructions {
+      font-size: 13.5px;
+      margin-bottom: 30px;
+    }
+    .rx-instructions ul {
+      margin: 6px 0 0 0;
+      padding-left: 20px;
+    }
+    .rx-footer {
+      position: absolute;
+      bottom: 160px;
+      left: 45px;
+      right: 45px;
+      display: table;
+      width: calc(100% - 90px);
+    }
+    .rx-contact {
+      display: table-cell;
+      width: 60%;
+      vertical-align: bottom;
+    }
+    .rx-contact-row {
+      margin-bottom: 8px;
+      font-size: 13px;
+    }
+    .rx-icon {
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      line-height: 24px;
+      text-align: center;
+      border-radius: 50%;
+      background: #0a2c66;
+      color: #ffffff;
+      font-size: 12px;
+      margin-right: 8px;
+      vertical-align: middle;
+    }
+    .rx-contact-text {
+      display: inline-block;
+      vertical-align: middle;
+    }
+    .rx-signature {
+      display: table-cell;
+      width: 40%;
+      text-align: center;
+      vertical-align: bottom;
+    }
+    .rx-sig-image {
+      max-height: 60px;
+      max-width: 180px;
+      margin-bottom: 5px;
+    }
+    .rx-sig-line {
+      width: 180px;
+      border-top: 1.5px solid #333;
+      margin: 0 auto 6px auto;
+    }
+    .rx-signature p {
+      font-weight: 800;
+      color: #0a2c66;
+      margin: 0;
+    }
+    .rx-wave {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      line-height: 0;
+      height: 120px;
+    }
+    .rx-wave svg {
+      width: 100%;
+      height: 120px;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+<div class="rx-card">
+
+  <div class="rx-header">
+    <h1 class="rx-clinic-name">Futuristic Physio & Wellness Hub</h1>
+    <h2 class="rx-doctor-name">DR. JANE DOE</h2>
+    <p class="rx-credentials">
+      BPTH (KEM), MPTH (MSK), MANUAL & MOVEMENT THERAPIST<br>
+      ADVANCED REHABILITATION SPECIALIST<br>
+      REG NO. 2010/05/PT/000486
+    </p>
+  </div>
+
+  <hr class="rx-hr">
+
+  <div class="rx-meta">
+    <div class="rx-meta-row">
+      <div class="rx-field rx-field-wide">
+        <span class="rx-label">Name:</span>
+        <span class="rx-value">Test Client</span>
+      </div>
+      <div class="rx-field">
+        <span class="rx-label">Date:</span>
+        <span class="rx-value">29-07-2026 04:30 PM</span>
+      </div>
+    </div>
+    <div class="rx-meta-row">
+      <div class="rx-field rx-field-wide">
+        <span class="rx-label">Age/Sex:</span>
+        <span class="rx-value">36y / M</span>
+      </div>
+      <div class="rx-field">
+        <span class="rx-label">Mobile:</span>
+        <span class="rx-value">+987654321</span>
+      </div>
+    </div>
+    <div class="rx-meta-row">
+      <div class="rx-field rx-field-wide">
+        <span class="rx-label">Office ID:</span>
+        <span class="rx-value">MP04EAAC</span>
+      </div>
+      <div class="rx-field"></div>
+    </div>
+  </div>
+
+  <div class="rx-notes">
+    
+    <p><span class="rx-label">Symptoms:</span> Dry cough, mild fever, throat irritation, nasal congestion</p>
+    
+    
+    <p><span class="rx-label">Findings:</span> Pharyngeal erythema (red throat), clear lung sounds, inflamed nasal mucosa</p>
+    
+    
+    <p><span class="rx-label">Notes:</span> Patient advised rest, warm hydration, and follow-up in 3 days if symptoms persist.</p>
+    
+    <p><span class="rx-label">Vitals:</span> Pulse: 78 /min, SPO2: 98 %, BP: 120/80 mmHg, Temp: 99.2 °F, Weight: 72 kg</p>
+    <p><span class="rx-label">Diagnosis:</span> Acute Upper Respiratory Tract Infection (URTI)</p>
+  </div>
+
+  <table class="rx-table">
+    <thead>
+      <tr>
+        <th class="rx-col-rx">Rx</th>
+        <th class="rx-col-name">Name</th>
+        <th class="rx-col-freq">Frequency</th>
+        <th class="rx-col-dur">Duration</th>
+        <th class="rx-col-notes">Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+      <tr>
+        <td>1</td>
+        <td>
+          <strong>Tablet Augmentin 625</strong>
+          
+          <span class="rx-generic">Amoxicillin + Clavulanic Acid</span>
+          
+        </td>
+        <td>1 unit - Twice Daily (BD)</td>
+        <td>5 Days</td>
+        <td>After Food</td>
+      </tr>
+      
+      <tr>
+        <td>2</td>
+        <td>
+          <strong>Tablet Panadol 500mg</strong>
+          
+          <span class="rx-generic">Paracetamol</span>
+          
+        </td>
+        <td>1 unit - Thrice Daily</td>
+        <td>3 Days</td>
+        <td>After Food</td>
+      </tr>
+      
+    </tbody>
+  </table>
+
+  
+
+  <div class="rx-footer">
+    <div class="rx-contact">
+      <div class="rx-contact-row">
+        <span class="rx-icon">&#9742;</span>
+        <span class="rx-contact-text"><strong>Phone</strong><br>+10000000000</span>
+      </div>
+      <div class="rx-contact-row">
+        <span class="rx-icon">&#9993;</span>
+        <span class="rx-contact-text"><strong>Email</strong><br>doctor@futuristicwellness.example</span>
+      </div>
+      <div class="rx-contact-row">
+        <span class="rx-icon">&#9825;</span>
+        <span class="rx-contact-text"><strong>Instagram</strong><br>@FuturisticPhysio</span>
+      </div>
+    </div>
+    <div class="rx-signature">
+      
+      <div class="rx-sig-line"></div>
+      <p>Signature</p>
+    </div>
+  </div>
+
+  <div class="rx-wave">
+    <svg viewBox="0 0 1056 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,70 C180,30 340,110 560,70 C760,40 900,90 1056,50 L1056,120 L0,120 Z" fill="#447dfd"/>
+      <path d="M0,100 C220,70 420,115 660,90 C840,70 950,105 1056,85 L1056,120 L0,120 Z" fill="#0a2358"/>
+    </svg>
+  </div>
+
+</div>
+
+</body>
+</html>

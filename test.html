@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Physio Prescription</title>
+    <style>
+        :root {
+            --navy: #06346f;
+            --royal: #245bc6;
+            --line: #1b5fb4;
+            --black: #111;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        @page {
+            size: A4 portrait;
+            margin: 0;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            background: #e8e8e8;
+            font-family: Arial, Helvetica, sans-serif;
+            color: var(--black);
+        }
+
+        body {
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        .page {
+            position: relative;
+            width: 210mm;
+            height: 297mm;
+            margin: 0 auto;
+            padding: 8mm 7mm 7mm;
+            background: #fff;
+            overflow: hidden;
+            border: 0.25mm solid #4c6c9b;
+        }
+
+        .content {
+            position: relative;
+            z-index: 2;
+            height: 100%;
+        }
+
+        .header {
+            text-align: center;
+            color: var(--navy);
+            line-height: 1.08;
+        }
+
+        .clinic-name {
+            margin: 0;
+            font-size: 8.1mm;
+            font-weight: 800;
+            letter-spacing: -0.2mm;
+        }
+
+        .doctor-name {
+            margin-top: 1.1mm;
+            color: #1152b5;
+            font-size: 5.4mm;
+            font-weight: 800;
+        }
+
+        .doctor-detail {
+            margin-top: 1.1mm;
+            font-size: 4.55mm;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .registration {
+            margin-top: 0.3mm;
+            font-size: 4.55mm;
+            font-weight: 800;
+        }
+
+        .header-rule {
+            height: 0.45mm;
+            background: var(--line);
+            margin-top: 2.4mm;
+        }
+
+        .patient-grid {
+            display: grid;
+            grid-template-columns: 1.1fr 0.65fr;
+            gap: 14mm;
+            margin-top: 6.3mm;
+            font-size: 4.2mm;
+        }
+
+        .field-row {
+            display: grid;
+            grid-template-columns: 25mm 1fr;
+            align-items: end;
+            margin-bottom: 4mm;
+        }
+
+        .field-row.right {
+            grid-template-columns: 20mm 1fr;
+        }
+
+        .label {
+            font-weight: 800;
+            color: var(--navy);
+        }
+
+        .value-line {
+            min-height: 6mm;
+            padding: 0 1.5mm 1mm;
+            border-bottom: 0.45mm solid var(--line);
+            white-space: nowrap;
+        }
+
+        .clinical {
+            margin-top: 5.5mm;
+            font-size: 3.95mm;
+            line-height: 1.28;
+        }
+
+        .clinical-row {
+            display: grid;
+            grid-template-columns: 27mm 1fr;
+            gap: 0;
+            margin-bottom: 3.4mm;
+        }
+
+        .clinical-row .c-label {
+            font-weight: 800;
+        }
+
+        .rx-table {
+            width: 100%;
+            margin-top: 8.5mm;
+            border-collapse: collapse;
+            table-layout: fixed;
+            font-size: 3.52mm;
+        }
+
+        .rx-table th,
+        .rx-table td {
+            border: 0.38mm solid #111;
+            padding: 1.35mm 1.6mm;
+            vertical-align: middle;
+        }
+
+        .rx-table th {
+            font-weight: 800;
+            text-align: center;
+            padding-top: 1.2mm;
+            padding-bottom: 1.2mm;
+        }
+
+        .rx-table .rx-col {
+            width: 10mm;
+            text-align: center;
+        }
+
+        .rx-table .name-col {
+            width: 95mm;
+        }
+
+        .rx-table .frequency-col {
+            width: 41mm;
+        }
+
+        .rx-table .duration-col {
+            width: 24mm;
+        }
+
+        .rx-table .notes-col {
+            width: 29mm;
+        }
+
+        .medicine-main {
+            display: block;
+            font-size: 3.5mm;
+        }
+
+        .medicine-main strong {
+            font-weight: 800;
+        }
+
+        .medicine-sub {
+            display: block;
+            margin-top: 0.5mm;
+            font-size: 2.7mm;
+            font-style: italic;
+            font-variant: small-caps;
+        }
+
+        .instructions {
+            margin-top: 6mm;
+            font-size: 3.35mm;
+        }
+
+        .instructions-title {
+            font-weight: 800;
+            font-size: 3.75mm;
+        }
+
+        .instructions ul {
+            margin: 1.2mm 0 0 6.2mm;
+            padding-left: 4mm;
+        }
+
+        .instructions li {
+            margin: 0.8mm 0;
+        }
+
+        .footer {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 22mm;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: end;
+            padding: 0 1.5mm;
+        }
+
+        .contact-list {
+            color: var(--navy);
+            font-size: 3.8mm;
+        }
+
+        .contact-row {
+            display: grid;
+            grid-template-columns: 10mm 1fr;
+            align-items: center;
+            margin-bottom: 2.6mm;
+        }
+
+        .icon {
+            width: 8.5mm;
+            height: 8.5mm;
+            border-radius: 50%;
+            background: var(--navy);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .icon svg {
+            width: 5.2mm;
+            height: 5.2mm;
+            stroke: #fff;
+            fill: none;
+            stroke-width: 1.8;
+        }
+
+        .contact-type {
+            color: #243d68;
+            font-weight: 400;
+            line-height: 1.1;
+        }
+
+        .contact-value {
+            color: #2d61bd;
+            margin-top: 0.5mm;
+            line-height: 1.1;
+        }
+
+        .signature {
+            padding: 0 5mm 7mm 8mm;
+            text-align: center;
+            color: var(--navy);
+        }
+
+        .signature-line {
+            height: 0.45mm;
+            background: var(--line);
+            width: 100%;
+            margin-bottom: 3.5mm;
+        }
+
+        .signature-label {
+            font-size: 5.5mm;
+            font-weight: 800;
+        }
+
+        .waves {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 33mm;
+            z-index: 1;
+        }
+
+        .waves svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        @media screen {
+            body {
+                padding: 20px 0;
+            }
+
+            .page {
+                box-shadow: 0 3px 20px rgba(0, 0, 0, .18);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page">
+        <div class="content">
+            <header class="header">
+                <h1 class="clinic-name">{{ clinic_name | default('Futuristic Physio & Wellness Hub') }}</h1>
+                <div class="doctor-name">{{ doctor_name | default('DR. SWANDHA MAJUMDAR (PT)') }}</div>
+                <div class="doctor-detail">{{ qualifications_line_1 | default('BPTH (KEM), MPTH (MSK), MANUAL & MOVEMENT
+                    THERAPIST') }}</div>
+                <div class="doctor-detail">{{ qualifications_line_2 | default('ADVANCED REHABILITATION SPECIALIST') }}
+                </div>
+                <div class="registration">{{ registration_no | default('REG NO. 2010/05/PT/000486') }}</div>
+            </header>
+            <div class="header-rule"></div>
+
+            <section class="patient-grid">
+                <div>
+                    <div class="field-row">
+                        <div class="label">Name:</div>
+                        <div class="value-line">{{ patient.name | default('Mr. Sushanth') }}</div>
+                    </div>
+                    <div class="field-row">
+                        <div class="label">Age/Sex:</div>
+                        <div class="value-line">{{ patient.age_sex | default('37y / M') }}</div>
+                    </div>
+                    <div class="field-row">
+                        <div class="label">Office ID:</div>
+                        <div class="value-line">{{ patient.office_id | default('MP1449') }}</div>
+                    </div>
+                </div>
+                <div>
+                    <div class="field-row right">
+                        <div class="label">Date:</div>
+                        <div class="value-line">{{ patient.date | default('20-01-2025 10:50 am') }}</div>
+                    </div>
+                    <div class="field-row right">
+                        <div class="label">Mobile:</div>
+                        <div class="value-line">{{ patient.mobile | default('9663501146') }}</div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="clinical">
+                <div class="clinical-row">
+                    <div class="c-label">Symptoms:</div>
+                    <div>{{ symptoms | default('no history of drug allergy, cough under evaluation, recent history of
+                        cold') }}</div>
+                </div>
+                <div class="clinical-row">
+                    <div class="c-label">Findings:</div>
+                    <div>{{ findings | default('Congestion of throat, congestion of nasal mucosa') }}</div>
+                </div>
+                <div class="clinical-row">
+                    <div class="c-label">Notes:</div>
+                    <div>{{ notes | default('Af') }}</div>
+                </div>
+                <div class="clinical-row">
+                    <div class="c-label">Vitals:</div>
+                    <div>{{ vitals | default('Pulse: 76 /min, SPO2: 96 %, BP: 120/75 mmHg') }}</div>
+                </div>
+                <div class="clinical-row">
+                    <div class="c-label">Diagnosis:</div>
+                    <div>{{ diagnosis | default('LRTI Lower respiratory tract infection, Chronic sinusitis, Acute
+                        Pharyngitis') }}</div>
+                </div>
+            </section>
+
+            <table class="rx-table">
+                <thead>
+                    <tr>
+                        <th class="rx-col">Rx</th>
+                        <th class="name-col">Name</th>
+                        <th class="frequency-col">Frequency</th>
+                        <th class="duration-col">Duration</th>
+                        <th class="notes-col">Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for medicine in medicines | default([
+                    {'name':'Tablet Cepodem XP (325 mg)','composition':'CEFPODOXIME(200 MG) + CLAVULANIC ACID(125
+                    MG)','frequency':'1 units - Twice a day','duration':'3 Days','notes':'After Food'},
+                    {'name':'Tablet Pantocid (40 mg)','composition':'PANTOPRAZOLE(40 MG)','frequency':'1 units - Once a
+                    day','duration':'SOS','notes':'Before Food'},
+                    {'name':'Tablet Pulmoclear','composition':'ACEBROPHYLLINE(100 MG) + ACETYL CYSTEINE(600
+                    MG)','frequency':'1 units - Twice a day','duration':'5 Days','notes':'After Food'},
+                    {'name':'Syrup Reswas (120 ml)','composition':'CHLORPHENIRAMINE MALEATE(2 MG) + LEVODROPROPIZINE(30
+                    MG)','frequency':'10 ml - Thrice a day','duration':'3 Days','notes':'cough'},
+                    {'name':'Tablet Mondeslor','composition':'DESLORATADINE(5 MG) + MONTELUKAST(10 MG)','frequency':'1
+                    units - Once a day','duration':'5 Days','notes':'Bedtime'}
+                    ]) %}
+                    <tr>
+                        <td class="rx-col">{{ loop.index }}</td>
+                        <td><span class="medicine-main">{{ medicine.name }}</span><span class="medicine-sub">{{
+                                medicine.composition }}</span></td>
+                        <td>{{ medicine.frequency }}</td>
+                        <td>{{ medicine.duration }}</td>
+                        <td>{{ medicine.notes }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <section class="instructions">
+                <div class="instructions-title">Instructions:</div>
+                <ul>
+                    {% for instruction in instructions | default(['salt water garggling', 'Review after 5 days']) %}
+                    <li>{{ instruction }}</li>
+                    {% endfor %}
+                </ul>
+            </section>
+
+            <footer class="footer">
+                <div class="contact-list">
+                    <div class="contact-row">
+                        <div class="icon"><svg viewBox="0 0 24 24">
+                                <path
+                                    d="M6.6 2.8 9 7.1 6.9 9.2c1.5 3.1 3.9 5.4 7 7l2.1-2.1 4.3 2.4c.5.3.8.9.6 1.5l-.6 2.3c-.2.7-.8 1.2-1.5 1.2C9.6 21.5 2.5 14.4 2.5 5.2c0-.7.5-1.3 1.2-1.5L6 3.1c.2-.1.4-.1.6-.3Z" />
+                            </svg></div>
+                        <div>
+                            <div class="contact-type">Phone</div>
+                            <div class="contact-value">{{ contact.phone | default('8369085685') }}</div>
+                        </div>
+                    </div>
+                    <div class="contact-row">
+                        <div class="icon"><svg viewBox="0 0 24 24">
+                                <rect x="3" y="5" width="18" height="14" rx="1.5" />
+                                <path d="m4 7 8 6 8-6" />
+                            </svg></div>
+                        <div>
+                            <div class="contact-type">Email</div>
+                            <div class="contact-value">{{ contact.email | default('futuristicphysiohub@gmail.com') }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="contact-row">
+                        <div class="icon"><svg viewBox="0 0 24 24">
+                                <path
+                                    d="M12 20S4 15.4 4 9.4C4 6.7 6 5 8.4 5c1.5 0 2.8.8 3.6 2 .8-1.2 2.1-2 3.6-2C18 5 20 6.7 20 9.4 20 15.4 12 20 12 20Z" />
+                            </svg></div>
+                        <div>
+                            <div class="contact-type">Instagram</div>
+                            <div class="contact-value">{{ contact.instagram | default('Futuristic Physio') }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="signature">
+                    <div class="signature-line"></div>
+                    <div class="signature-label">Signature</div>
+                </div>
+            </footer>
+        </div>
+
+        <div class="waves" aria-hidden="true">
+            <svg viewBox="0 0 1000 180" preserveAspectRatio="none">
+                <path d="M0 56 C180 105 350 110 505 83 C670 54 825 7 1000 0 L1000 180 L0 180 Z" fill="#8fc4ff" />
+                <path d="M0 96 C220 129 420 132 600 103 C760 78 875 38 1000 20 L1000 180 L0 180 Z" fill="#487ff1" />
+                <path d="M0 137 C250 171 468 171 650 146 C820 124 905 91 1000 80 L1000 180 L0 180 Z" fill="#0c4fc5" />
+                <path d="M0 154 C270 186 515 187 715 169 C830 159 915 143 1000 139 L1000 180 L0 180 Z" fill="#00316e" />
+            </svg>
+        </div>
+    </div>
+</body>
+
+</html>
