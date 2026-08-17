@@ -108,6 +108,8 @@ app.include_router(appointments_router, prefix=f"{settings.API_V1_STR}/appointme
 app.include_router(prescriptions_router, prefix=f"{settings.API_V1_STR}/prescriptions", tags=["Prescriptions"])
 app.include_router(reviews_router, prefix=f"{settings.API_V1_STR}/reviews", tags=["Reviews"])
 
+from fastapi.responses import FileResponse
+
 @app.get("/health")
 async def health():
     return {
@@ -116,9 +118,19 @@ async def health():
         "tagline": "Care that fits your life."
     }
 
-# Mount compiled React SPA frontend if dist directory exists (e.g. inside Docker container)
+# Mount static frontend build if present (for single container / Docker deployment)
 if os.path.exists("frontend/dist"):
-    app.mount("/", StaticFiles(directory="frontend/dist", html=True), name="frontend")
+    # Mount static assets first (assets, images, JS, CSS)
+    if os.path.exists("frontend/dist/assets"):
+        app.mount("/assets", StaticFiles(directory="frontend/dist/assets"), name="frontend-assets")
+    
+    # Catch-all route to return index.html for React SPA client-side routes (e.g. /login, /doctor, /client)
+    @app.get("/{full_path:path}")
+    async def serve_spa(full_path: str):
+        file_path = os.path.join("frontend/dist", full_path)
+        if os.path.isfile(file_path):
+            return FileResponse(file_path)
+        return FileResponse("frontend/dist/index.html")
 else:
     @app.get("/")
     async def root():
