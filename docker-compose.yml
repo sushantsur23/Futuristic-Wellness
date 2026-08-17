@@ -1,35 +1,22 @@
 services:
-  # Backend API service (FastAPI + SQLAlchemy + WeasyPrint)
-  backend:
+  app:
     build:
       context: .
-      dockerfile: backend/Dockerfile
-    image: sushantsur23/futuristic-wellness-backend:latest
-    container_name: futuristic_wellness_backend
+      dockerfile: Dockerfile
+    image: sushantsur23/futuristic-wellness:latest
+    container_name: futuristic_wellness
     ports:
-      - "8000:8000"
+      - "8000:80"
+      - "80:80"
     environment:
       DATABASE_URL: "sqlite+aiosqlite:////app/backend/wellness.db"
       JWT_SECRET: "wellness_super_secret_session_key_1234567890_abc"
       ACCESS_TOKEN_EXPIRE_MINUTES: "10080"
-      BACKEND_CORS_ORIGINS: '["http://localhost", "http://localhost:80", "http://localhost:5173", "http://localhost:8000", "http://127.0.0.1:8000"]'
     volumes:
       - uploads_data:/app/static/uploads
-    restart: unless-stopped
-
-  # Frontend Web App service (React + Nginx reverse proxy)
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    image: sushantsur23/futuristic-wellness-frontend:latest
-    container_name: futuristic_wellness_frontend
-    ports:
-      - "80:80"
-      - "5173:80"
-    depends_on:
-      - backend
+      - db_data:/app/backend
     restart: unless-stopped
 
 volumes:
   uploads_data:
+  db_data:

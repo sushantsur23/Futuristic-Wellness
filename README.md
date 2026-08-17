@@ -125,7 +125,7 @@ docker build -t sushantsur23/futuristic-wellness:latest .
 ### 2. Run Container Locally
 Using Docker run:
 ```bash
-docker run -d -p 8000:8000 --name futuristic_wellness sushantsur23/futuristic-wellness:latest
+docker run -d -p 8000:80 --name futuristic_wellness sushantsur23/futuristic-wellness:latest
 ```
 
 Using Docker Compose:
@@ -146,7 +146,7 @@ docker push sushantsur23/futuristic-wellness:latest
 ### 4. Pull and Run from Docker Repository on any machine
 ```bash
 docker pull sushantsur23/futuristic-wellness:latest
-docker run -d -p 8000:8000 sushantsur23/futuristic-wellness:latest
+docker run -d -p 8000:80 sushantsur23/futuristic-wellness:latest
 ```
 
 ---
