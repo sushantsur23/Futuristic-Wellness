@@ -108,10 +108,22 @@ app.include_router(appointments_router, prefix=f"{settings.API_V1_STR}/appointme
 app.include_router(prescriptions_router, prefix=f"{settings.API_V1_STR}/prescriptions", tags=["Prescriptions"])
 app.include_router(reviews_router, prefix=f"{settings.API_V1_STR}/reviews", tags=["Reviews"])
 
-@app.get("/")
-async def root():
+@app.get("/health")
+async def health():
     return {
         "app": settings.PROJECT_NAME,
         "status": "online",
         "tagline": "Care that fits your life."
     }
+
+# Mount compiled React SPA frontend if dist directory exists (e.g. inside Docker container)
+if os.path.exists("frontend/dist"):
+    app.mount("/", StaticFiles(directory="frontend/dist", html=True), name="frontend")
+else:
+    @app.get("/")
+    async def root():
+        return {
+            "app": settings.PROJECT_NAME,
+            "status": "online",
+            "tagline": "Care that fits your life."
+        }

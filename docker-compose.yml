@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: sushantsur23/futuristic-wellness:latest
+    container_name: futuristic_wellness_app
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=sqlite+aiosqlite:////app/backend/wellness.db
+      - JWT_SECRET=wellness_super_secret_session_key_1234567890_abc
+      - ACCESS_TOKEN_EXPIRE_MINUTES=10080
+    volumes:
+      - wellness_data:/app/backend
+      - uploads_data:/app/static/uploads
+    restart: unless-stopped
+
+volumes:
+  wellness_data:
+  uploads_data:

@@ -113,6 +113,44 @@ If you haven't connected your local repository to GitHub yet:
 
 ---
 
+## 🐳 Docker Setup & Deployment
+
+The application features a **multi-stage minimal Docker build** (`Dockerfile`) that compiles the React frontend, packages Python dependencies in a slim environment, and serves both via Uvicorn in a lightweight production container.
+
+### 1. Build Docker Image Locally
+```bash
+docker build -t sushantsur23/futuristic-wellness:latest .
+```
+
+### 2. Run Container Locally
+Using Docker run:
+```bash
+docker run -d -p 8000:8000 --name futuristic_wellness sushantsur23/futuristic-wellness:latest
+```
+
+Using Docker Compose:
+```bash
+docker compose up -d
+```
+Access the application at [http://localhost:8000](http://localhost:8000).
+
+### 3. Push Image to Docker Repository (Docker Hub)
+```bash
+# Login to Docker Hub
+docker login
+
+# Push image to your Docker Hub repository
+docker push sushantsur23/futuristic-wellness:latest
+```
+
+### 4. Pull and Run from Docker Repository on any machine
+```bash
+docker pull sushantsur23/futuristic-wellness:latest
+docker run -d -p 8000:8000 sushantsur23/futuristic-wellness:latest
+```
+
+---
+
 ## 📄 License
 
 This project is released under the MIT License.
