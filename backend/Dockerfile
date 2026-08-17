@@ -15,7 +15,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN python -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 
-COPY requirements.txt ./
+COPY backend/requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
 # =========================================================
@@ -40,9 +40,13 @@ COPY --from=builder /opt/venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 ENV PYTHONPATH="/app"
 
-# Copy backend application source code and static upload directory
-COPY . /app/backend
-COPY ../static /app/static 2>/dev/null || true
+# Copy backend application source code
+COPY backend /app/backend
+COPY static /app/static
+COPY .env.example /app/.env.example
+
+# Create uploads dir
+RUN mkdir -p /app/static/uploads
 
 # Set default production environment variables
 ENV PORT=8000
@@ -50,5 +54,4 @@ ENV DATABASE_URL="sqlite+aiosqlite:////app/backend/wellness.db"
 
 EXPOSE 8000
 
-# Run Uvicorn server from the workspace root context
 CMD ["uvicorn", "backend.app.main:app", "--host", "0.0.0.0", "--port", "8000"]
