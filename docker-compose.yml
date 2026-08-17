@@ -3,7 +3,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: sushantsur23/futuristic-wellness:latest
+    image: p838683132/futuristic-wellness:latest
     container_name: futuristic_wellness
     ports:
       - "8000:80"

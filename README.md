@@ -119,13 +119,13 @@ The application features a **multi-stage minimal Docker build** (`Dockerfile`) t
 
 ### 1. Build Docker Image Locally
 ```bash
-docker build -t sushantsur23/futuristic-wellness:latest .
+docker build -t p838683132/futuristic-wellness:latest .
 ```
 
 ### 2. Run Container Locally
 Using Docker run:
 ```bash
-docker run -d -p 8000:80 --name futuristic_wellness sushantsur23/futuristic-wellness:latest
+docker run -d -p 8000:80 --name futuristic_wellness p838683132/futuristic-wellness:latest
 ```
 
 Using Docker Compose:
@@ -140,13 +140,13 @@ Access the application at [http://localhost:8000](http://localhost:8000).
 docker login
 
 # Push image to your Docker Hub repository
-docker push sushantsur23/futuristic-wellness:latest
+docker push p838683132/futuristic-wellness:latest
 ```
 
 ### 4. Pull and Run from Docker Repository on any machine
 ```bash
-docker pull sushantsur23/futuristic-wellness:latest
-docker run -d -p 8000:80 sushantsur23/futuristic-wellness:latest
+docker pull p838683132/futuristic-wellness:latest
+docker run -d -p 8000:80 p838683132/futuristic-wellness:latest
 ```
 
 ---
