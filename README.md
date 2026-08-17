@@ -7,6 +7,7 @@ A modern web application built with FastAPI (Python) on the backend and React + 
 - **FastAPI Backend**: Async REST API with SQLAlchemy 2, Alembic migrations, JWT authentication, and Pydantic validation.
 - **PDF Generation**: Prescription and report PDF generation via Jinja2 & WeasyPrint / xhtml2pdf.
 - **React Frontend**: Powered by React 19, TypeScript, Vite, React Query, React Hook Form, Zod, and Lucide icons.
+- **Single-Image Container**: Unified Nginx + Uvicorn architecture running via Supervisor for simple 1-command deployment.
 - **Async Scheduler**: Background task scheduling using APScheduler.
 
 ---
@@ -23,18 +24,85 @@ Futuristic Wellness/
 ├── frontend/           # React + TypeScript + Vite Application
 │   ├── src/            # Components, Views, and Hooks
 │   └── package.json
+├── nginx.conf          # Nginx reverse proxy and SPA router config
+├── supervisord.conf    # Supervisor process manager config
+├── Dockerfile          # Multi-stage production Docker build
+├── docker-compose.yml  # Docker Compose orchestration
 └── README.md
 ```
 
 ---
 
+## 🔑 Test Credentials
+
+Use these pre-configured accounts to test the application:
+
+### 🩺 1. Doctor (Admin) Portal
+- **Email / Identifier**: `doctor@futuristicwellness.example`
+- **Password**: `DoctorPass123!`
+- **Role**: `DOCTOR` (Dr. Swandha Majumdar)
+- **Features**: Doctor Dashboard, Patient Prescriptions Generator (PDFs), Schedule & Availability Rules, Appointment Consultations, and Reviews overview.
+
+### 👤 2. Patient (Client) Portal
+- **Email / Identifier**: `patient123@example.com`
+- **Password**: `ClientPass123!`
+- **Role**: `CLIENT` (Test Patient)
+- **Features**: Book Consultations, View Real-Time Slot Availability, Access Prescriptions & Therapy Plans, and Leave Reviews.
+
+> 💡 **Tip:** You can also register a brand new patient account directly by clicking **"Sign Up"** / **"Register"** on the home page.
+
 ---
 
-## 🚦 Getting Started
+## 🐳 Quick Start with Docker (Recommended)
 
-### Initial Setup (First Time Only)
+You can download and run the pre-built, production-ready container without needing Python or Node.js installed locally.
 
-#### 1. Backend Setup
+### 1. Download (Pull) Image from Docker Hub
+```bash
+docker pull p838683132/futuristic-wellness:latest
+```
+
+### 2. Run the Container Locally
+```bash
+docker run -d -p 8000:80 --name futuristic_wellness p838683132/futuristic-wellness:latest
+```
+
+*(Alternatively, if you cloned this repo, run: `docker compose up -d`)*
+
+### 3. Open in Browser
+- 🌐 **Web App (Frontend + Login + All Portals)**: [http://localhost:8000](http://localhost:8000)
+- ⚙️ **Interactive API Docs (Swagger UI)**: [http://localhost:8000/docs](http://localhost:8000/docs)
+- 🩺 **Health Check**: [http://localhost:8000/health](http://localhost:8000/health)
+
+---
+
+## 🛠️ Building & Pushing the Docker Image
+
+### Build Locally
+```bash
+docker build -t p838683132/futuristic-wellness:latest .
+```
+
+### Push to Docker Hub
+```bash
+docker login
+docker push p838683132/futuristic-wellness:latest
+```
+
+---
+
+## 🚦 Local Development Setup (Without Docker)
+
+### Prerequisites
+
+- **Python**: `^3.10`
+- **Node.js**: `^18.0` or `^20.0`
+- **Git**
+
+---
+
+### Backend Setup
+
 1. Navigate to the backend folder:
    ```bash
    cd backend
@@ -51,7 +119,7 @@ Futuristic Wellness/
    ```bash
    pip install -r requirements.txt
    ```
-4. Copy the environment template to `.env` and adjust settings if needed:
+4. Copy the environment template and set your credentials:
    ```bash
    cp .env.example .env
    ```
@@ -59,9 +127,16 @@ Futuristic Wellness/
    ```bash
    alembic upgrade head
    ```
+6. Start backend development server:
+   ```bash
+   uvicorn app.main:app --reload --port 8000
+   ```
 
-#### 2. Frontend Setup
-1. Navigate to the frontend folder:
+---
+
+### Frontend Setup
+
+1. Open a second terminal and navigate to the frontend folder:
    ```bash
    cd frontend
    ```
@@ -69,85 +144,11 @@ Futuristic Wellness/
    ```bash
    npm install
    ```
-
----
-
-## 🏃 Running Locally
-
-Once your environment is set up, run both servers in separate terminal windows:
-
-### Terminal 1: Backend Server
-```bash
-cd backend
-# Activate virtual environment (if not already active)
-.\venv\Scripts\Activate.ps1   # PowerShell
-# source venv/bin/activate    # Linux/macOS
-
-# Start FastAPI development server
-uvicorn app.main:app --reload --port 8000
-```
-- **Backend API**: [http://localhost:8000](http://localhost:8000)
-- **Interactive API Documentation (Swagger UI)**: [http://localhost:8000/docs](http://localhost:8000/docs)
-
-### Terminal 2: Frontend Server
-```bash
-cd frontend
-
-# Start Vite development server
-npm run dev
-```
-- **Frontend App**: [http://localhost:5173](http://localhost:5173)
-
----
-
-## 🐙 Pushing to GitHub
-
-If you haven't connected your local repository to GitHub yet:
-
-1. Create a repository on [GitHub](https://github.com/new) (e.g., `futuristic-wellness`).
-2. Run the following commands in your project root:
+3. Start frontend development server:
    ```bash
-   git remote add origin https://github.com/sushantsur23/YOUR_REPOSITORY_NAME.git
-   git push -u origin main
+   npm run dev
    ```
-
----
-
-## 🐳 Docker Setup & Deployment
-
-The application features a **multi-stage minimal Docker build** (`Dockerfile`) that compiles the React frontend, packages Python dependencies in a slim environment, and serves both via Uvicorn in a lightweight production container.
-
-### 1. Build Docker Image Locally
-```bash
-docker build -t p838683132/futuristic-wellness:latest .
-```
-
-### 2. Run Container Locally
-Using Docker run:
-```bash
-docker run -d -p 8000:80 --name futuristic_wellness p838683132/futuristic-wellness:latest
-```
-
-Using Docker Compose:
-```bash
-docker compose up -d
-```
-Access the application at [http://localhost:8000](http://localhost:8000).
-
-### 3. Push Image to Docker Repository (Docker Hub)
-```bash
-# Login to Docker Hub
-docker login
-
-# Push image to your Docker Hub repository
-docker push p838683132/futuristic-wellness:latest
-```
-
-### 4. Pull and Run from Docker Repository on any machine
-```bash
-docker pull p838683132/futuristic-wellness:latest
-docker run -d -p 8000:80 p838683132/futuristic-wellness:latest
-```
+4. Access the frontend app at [http://localhost:5173](http://localhost:5173).
 
 ---
 
